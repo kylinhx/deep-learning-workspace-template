@@ -2,7 +2,7 @@
 Author: kylinhanx kylinhanx@gmail.com
 Date: 2024-12-31 16:49:59
 LastEditors: kylinhanx kylinhanx@gmail.com
-LastEditTime: 2025-01-05 20:08:16
+LastEditTime: 2025-01-05 20:10:37
 FilePath: \pipeline\src\utils.py
 Description: List some commonly used functions
 '''
@@ -255,30 +255,30 @@ def plot_confusion_matrix(y_true, y_pred, labels, title, saved_path, normalize=F
     plt.savefig(saved_path)
     # plt.show()
 
-def plot_loss(saved_path, loss_list, loss_labels):
-    '''plot train loss
+def plot_cruve(saved_path, data_list, data_labels):
+    '''plot cruve
 
-    Plot train loss
+    Plot cruve
 
     Parameters:
         saved_path: str, path to save the figure
-        loss_list: 2-dim, list, train loss
-        loss_labels: 1-dim, list, labels for each loss
+        data_list: 2-dim, list, train loss
+        data_labels: 1-dim, list, labels for each loss
     Returns:
         None
     Raises:
         ValueError: if train_loss is not a list
         ValueError: if saved_path is not a string
     '''
-    if not isinstance(train_loss, list):
+    if not isinstance(data_list, list):
         raise ValueError("train_loss must be a list")
     if not isinstance(saved_path, str):
         raise ValueError("saved_path must be a string")
-    if len(loss_labels) != len(loss_list):
+    if len(data_labels) != len(data_list):
         raise ValueError("loss_labels must have the same length as loss_list")
     import matplotlib.pyplot as plt
-    for i, loss in enumerate(loss_list):
-        plt.plot(loss, label=loss_labels[i])
+    for i, data in enumerate(data_list):
+        plt.plot(data, label=data_labels[i])
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.legend()
