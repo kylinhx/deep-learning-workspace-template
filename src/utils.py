@@ -2,7 +2,7 @@
 Author: kylinhanx kylinhanx@gmail.com
 Date: 2024-12-31 16:49:59
 LastEditors: kylinhanx kylinhanx@gmail.com
-LastEditTime: 2025-01-05 20:10:37
+LastEditTime: 2025-01-05 22:44:15
 FilePath: \pipeline\src\utils.py
 Description: List some commonly used functions
 '''
@@ -18,6 +18,7 @@ import cpuinfo
 import psutil
 import GPUtil
 from tabulate import tabulate
+from torchsummary import summary
 
 def read_yaml(file_path):
     '''Read yaml file
@@ -284,4 +285,110 @@ def plot_cruve(saved_path, data_list, data_labels):
     plt.legend()
     plt.savefig(saved_path)
     # plt.show()
-    
+
+def print_model_structure(model, input_shape):
+    '''print model structure
+
+    Print model structure
+
+    Parameters:
+        model: torch.nn.Module, model to print structure
+        input_shape: tuple, input shape of the model
+    Returns:
+        None
+    Raises:
+        ValueError: if model is not an instance of torch.nn.Module
+    '''
+    if not isinstance(model, torch.nn.Module):
+        raise ValueError("model must be an instance of torch.nn.Module")
+    model = model.cuda()
+    summary(model, input_shape)
+
+def save_model_with_extra_info(model, saved_path):
+    '''save model with extra information
+
+    Save model state_dict with extra information including
+
+    Parameters:
+        model: torch.nn.Module, model to save
+        saved_path: str, path to save the model
+    Returns:
+        None
+    Raises:
+        ValueError: if model is not an instance of torch.nn.Module
+        ValueError: if saved_path is not a string
+    '''
+    created_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    model_info = {
+        "created_date": created_date,
+        "model": model.state_dict(),
+    }
+    if not isinstance(model, torch.nn.Module):
+        raise ValueError("model must be an instance of torch.nn.Module")
+    if not isinstance(saved_path, str):
+        raise ValueError("saved_path must be a string")
+    torch.save(model_info, saved_path)
+
+def save_model(model, saved_path):
+    '''save model
+
+    Save model state_dict
+
+    Parameters:
+        model: torch.nn.Module, model to save
+        saved_path: str, path to save the model
+    Returns:
+        None
+    Raises:
+        ValueError: if model is not an instance of torch.nn.Module
+        ValueError: if saved_path is not a string
+    '''
+    if not isinstance(model, torch.nn.Module):
+        raise ValueError("model must be an instance of torch.nn.Module")
+    if not isinstance(saved_path, str):
+        raise ValueError("saved_path must be a string")
+    torch.save(model.state_dict(), saved_path)
+
+def load_model_with_extra_info(model_path):
+    '''load model with extra information
+
+    Load model state_dict with extra information including
+
+    Parameters:
+        model_path: str, path to the model
+    Returns:
+        model: torch.nn.Module, loaded model
+    Raises:
+        ValueError: if model_path is not a string
+        PathNotFoundError: if the model_path does not exist
+    '''
+    if not isinstance(saved_path, str):
+        raise ValueError("saved_path must be a string")
+    if not os.path.exists(saved_path):
+        raise FileNotFoundError(f"Model path not found: {saved_path}")
+    model_info = torch.load(saved_path, map_location='cpu')
+    model.load_state_dict(model_info["model"])
+    print(f"Model created date: {model_info['created_date']}")
+    print(f"Model loaded from: {saved_path}")
+    return model
+
+def load_model(model_path):
+    '''load model
+
+    Load model state_dict
+
+    Parameters:
+        model_path: str, path to the model
+    Returns:
+        model: torch.nn.Module, loaded model
+    Raises:
+        ValueError: if model_path is not a string
+        PathNotFoundError: if the model_path does not exist
+    '''
+    if not isinstance(saved_path, str):
+        raise ValueError("saved_path must be a string")
+    if not os.path.exists(saved_path):
+        raise FileNotFoundError(f"Model path not found: {saved_path}")
+    model.load_state_dict(torch.load(saved_path, map_location='cpu'))
+    print(f"Model loaded from: {saved_path}")
+    return model
