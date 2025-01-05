@@ -2,7 +2,7 @@
 Author: kylinhanx kylinhanx@gmail.com
 Date: 2024-12-31 16:49:59
 LastEditors: kylinhanx kylinhanx@gmail.com
-LastEditTime: 2025-01-05 22:44:15
+LastEditTime: 2025-01-05 23:13:33
 FilePath: \pipeline\src\utils.py
 Description: List some commonly used functions
 '''
@@ -154,8 +154,8 @@ def get_system_info():
         "GPU Total Memory (GB)": gpu_memory_total_gb,
     }
 
-def infer_time(model, test_loader):
-    '''infer time for a model
+def get_infer_time(model, test_loader):
+    '''get infer time for a model
 
     Infer time for a model on a test_loader, the model is
     set to evaluation mode and the time is measured using
@@ -286,8 +286,8 @@ def plot_cruve(saved_path, data_list, data_labels):
     plt.savefig(saved_path)
     # plt.show()
 
-def print_model_structure(model, input_shape):
-    '''print model structure
+def get_model_structure(model, input_shape):
+    '''get model structure
 
     Print model structure
 
